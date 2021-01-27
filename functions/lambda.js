@@ -7,8 +7,6 @@ const {
   DB_PORT
 } = process.env
 
-console.log(' -- DB_PORT -- ', DB_PORT)
-
 const mysql = require('mysql2/promise')
 const fetch = require('node-fetch')
 const xmlParser = require('xml2json')
@@ -27,7 +25,7 @@ exports.handler = async (event ,context) => {
     if (!results || results.length === 0) {
       return {
         statusCode: 200,
-        profiles: []
+        body: []
       }
     }
 
@@ -36,13 +34,15 @@ exports.handler = async (event ,context) => {
 
     return {
       statusCode: 200,
-      profiles
+      body: profiles
     }
   } catch (error) {
     console.log(' -- Main error -- ', error)
     return {
       statusCode: 500,
-      error: error
+      body: {
+        error
+      }
     }
   }
 }
