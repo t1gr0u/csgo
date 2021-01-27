@@ -7,6 +7,8 @@ const {
   DB_PORT
 } = process.env
 
+console.log(' -- DB_PORT -- ', DB_PORT)
+
 const mysql = require('mysql2/promise')
 const fetch = require('node-fetch')
 const xmlParser = require('xml2json')
