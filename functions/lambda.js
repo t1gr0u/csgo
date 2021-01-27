@@ -25,7 +25,7 @@ exports.handler = async (event ,context) => {
     if (!results || results.length === 0) {
       return {
         statusCode: 200,
-        body: []
+        body: '[]'
       }
     }
 
@@ -34,15 +34,14 @@ exports.handler = async (event ,context) => {
 
     return {
       statusCode: 200,
-      body: profiles
+      body: JSON.parse(profiles)
     }
   } catch (error) {
     console.log(' -- Main error -- ', error)
     return {
       statusCode: 500,
-      body: {
-        error
-      }
+      body:
+        JSON.parse({ error })
     }
   }
 }
