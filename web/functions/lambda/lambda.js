@@ -30,7 +30,7 @@ exports.handler = async (event ,context) => {
     }
 
     const profiles = await getProfiles(results)
-    console.log(' -- profiles -- ', profiles)
+    // console.log(' -- profiles -- ', profiles)
 
     return {
       statusCode: 200,
@@ -70,7 +70,7 @@ const getDBResults = async () => {
 const getProfiles = async (players) => {
   const promises = players.map(async (player) => {
     player = JSON.parse(JSON.stringify(player))
-    player.avatar2 = await getProfile(player.steamid)
+    player.avatar = await getProfile(player.steamid)
 
     return player
   })

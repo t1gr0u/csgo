@@ -18,9 +18,21 @@
         <div class="row">
           <div class="col s12 m6 push-m3">
             <h1 class="center-align">CS:GO</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 m6 push-m3">
+            <div class="progress blue lighten-5">
+              <div class="indeterminate blue"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 m6 push-m3">
             <!-- Page Content goes here -->
             <ul class="collection">
-              <li class="collection-item avatar">
+              <!--
+                <li class="collection-item avatar">
                 <img src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/94/9422a83440566e76091b555e4248789023f20c00_medium.jpg" alt="" class="circle z-depth-3">
                 <span class="title">ColorGamer</span>
                 <a href="#!" class="secondary-content"><i class="material-icons green-text">brightness_1</i></a>
@@ -33,16 +45,29 @@
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons red-text">brightness_1</i></a>
               </li>
+              -->
             </ul>
           </div>
         </div>
       </div>
 
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
       <script type="text/javascript">
-      (function() {
-        fetch('https://csgo-equinoxe.netlify.app/.netlify/functions/lambda')
-          .then(response => response.text())
-          .then(j => console.log(' -- j -- ', j))
+        window.addEventListener('load', function () {
+          fetch('/.netlify/functions/lambda')
+            .then(response => response.json())
+            // .then(j => {
+            //   console.log(' -- j -- ', j)
+            //   return j
+            // })
+            .then(players => {
+              if (players && players.length > 0) {
+                players.map(player => {
+                  $(`<li class="collection-item avatar"><img src="${player.avatar}" alt="" class="circle z-depth-3"><span class="title">${player.name}</span>${player.alive ? '' : `<p>Last seen: ${player.lastconn}<br></p>`}<a href="#!" class="secondary-content"><i class="material-icons ${player.alive ? 'green' : 'red'}-text">brightness_1</i></a></li>`).appendTo('.collection')
+                })
+                $('.progress').hide()
+              }
+            })
       })
       </script>
       <!--JavaScript at end of body for optimized loading-->
