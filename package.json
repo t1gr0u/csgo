@@ -1,0 +1,17 @@
+{
+  "name": "csgo",
+  "version": "1.0.0",
+  "description": "Netlify lambda script to fetch the players",
+  "main": "lambda.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.1",
+    "xml2json": "^0.12.0"
+  }
+}
