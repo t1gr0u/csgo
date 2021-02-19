@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>CS:GO Equinoxe</title>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <!-- <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/> -->
+
+      <!-- Compiled and minified CSS -->
+      <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" media="screen,projection">
+
+      <style>
+        .map-image {
+          width: 250px;
+        }
+      </style>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+      <div class="container">
+        <div class="row">
+          <div class="col s12 m6 push-m3">
+            <h1 class="center-align" id="map-name"></h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 m3 push-m3" id="map-image">
+
+          </div>
+          <div class="col s12 m3 push-m3">
+            <p>
+              <b>Date: </b><span id="match-date"></span>
+            </p>
+            <p>
+              <b>Rounds: </b><span id="match-rounds"></span>
+            </p>
+            <p>
+              <b>Duration: </b>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 m6 push-m3">
+            <table class="striped">
+              <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>K/D</th>
+                    <th>Shots</th>
+                    <th>Hits</th>
+                    <th>Assists</th>
+                    <th>Damage</th>
+                    <th>ADR</th>
+                    <th>Flash</th>
+                </tr>
+              </thead>
+
+              <tbody id="profiles">
+
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+        window.addEventListener('load', function () {
+          const path = window.location.pathname.split('/')
+          const matchId = path[path.length - 1]
+          if (isNaN(matchId)) return
+          fetch(`/.netlify/functions/matches?matchId=${matchId}`)
+            .then(response => response.json())
+            .then(profiles => {
+              if (profiles && profiles.length > 0) {
+                const mapName = profiles[0].map
+                const rounds = profiles[0].rounds
+                const startedAt = profiles[0].startedAt
+
+                $('#map-name').html(mapName)
+                $(`<img src="/img/${mapName}.jpg" class="map-image">`).appendTo('#map-image')
+                $('#match-date').html(startedAt)
+                $('#match-rounds').html(rounds)
+
+                profiles.map(profile => {
+                  let text = '<tr>'
+                  text += `<td>${profile.name}</td>`
+                  text += `<td>${profile.kills}</td>`
+                  text += `<td>${profile.deaths}</td>`
+                  text += `<td>${Number.parseFloat(profile.kills / profile.deaths).toFixed(2)}</td>`
+                  text += `<td>${profile.shots}</td>`
+                  text += `<td>${profile.hits}</td>`
+                  text += `<td>${profile.assists}</td>`
+                  text += `<td>${profile.damage}</td>`
+                  text += `<td>${Number.parseFloat(profile.damage / profile.rounds).toFixed(2)}</td>`
+                  text += `<td>${profile.blind}</td>`
+                  text += '</tr>'
+
+                  $(text).appendTo('#profiles')
+                })
+                $('.progress').hide()
+              }
+            })
+        })
+      </script>
+      <!--JavaScript at end of body for optimized loading-->
+      <!-- Compiled and minified JavaScript -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+  </html>

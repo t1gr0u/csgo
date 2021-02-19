@@ -1,13 +1,4 @@
-require('dotenv').config()
-const {
-  DB_HOST,
-  DB_USER,
-  DB_PASS,
-  DB_DB,
-  DB_PORT
-} = process.env
-
-const mysql = require('mysql2/promise')
+const db = require('./../libs/mysql')
 const fetch = require('node-fetch')
 const xmlParser = require('xml2json')
 
@@ -30,7 +21,7 @@ exports.handler = async (event ,context) => {
     }
 
     const profiles = await getProfiles(results)
-    console.log(' -- profiles -- ', profiles)
+    // console.log(' -- profiles -- ', profiles)
 
     return {
       statusCode: 200,
@@ -47,13 +38,7 @@ exports.handler = async (event ,context) => {
 
 const getDBResults = async () => {
   try {
-    const connection = await mysql.createConnection({
-      host: DB_HOST,
-      user: DB_USER,
-      password: DB_PASS,
-      database: DB_DB,
-      port: DB_PORT
-    })
+    const connection = await db.execute()
 
     const [rows] = await connection.execute('SELECT `steamid`, `name`, `lastconn`, `alive` FROM players ORDER BY alive DESC, `name` ASC;')
     // console.log(' -- rows -- ', rows)

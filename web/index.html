@@ -1,6 +1,7 @@
 <!DOCTYPE html>
   <html>
     <head>
+      <title>CS:GO Equinoxe</title>
       <!--Import Google Icon Font-->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
@@ -31,22 +32,29 @@
           <div class="col s12 m6 push-m3">
             <!-- Page Content goes here -->
             <ul class="collection">
-              <!--
-                <li class="collection-item avatar">
-                <img src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/94/9422a83440566e76091b555e4248789023f20c00_medium.jpg" alt="" class="circle z-depth-3">
-                <span class="title">ColorGamer</span>
-                <a href="#!" class="secondary-content"><i class="material-icons green-text">brightness_1</i></a>
-              </li>
 
-              <li class="collection-item avatar">
-                <img src="https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/9b/9bb57dbb46797890e48c73f0e35be3e5efc903f0_medium.jpg" alt="" class="circle z-depth-3">
-                <span class="title">t1gr0u_m</span>
-                <p>Last seen: 2021-01-26 19:13:44<br>
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons red-text">brightness_1</i></a>
-              </li>
-              -->
             </ul>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 m6 push-m3">
+            <!-- Page Content goes here -->
+
+            <table class="striped">
+              <thead>
+                <tr>
+                    <th>Map</th>
+                    <th>Rounds</th>
+                    <th>Started at</th>
+                    <th></th>
+                </tr>
+              </thead>
+
+              <tbody id="matches">
+
+              </tbody>
+            </table>
+
           </div>
         </div>
       </div>
@@ -54,12 +62,8 @@
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
       <script type="text/javascript">
         window.addEventListener('load', function () {
-          fetch('/.netlify/functions/lambda')
+            fetch('/.netlify/functions/lambda')
             .then(response => response.json())
-            // .then(j => {
-            //   console.log(' -- j -- ', j)
-            //   return j
-            // })
             .then(players => {
               if (players && players.length > 0) {
                 players.map(player => {
@@ -68,7 +72,18 @@
                 $('.progress').hide()
               }
             })
-      })
+
+            fetch('/.netlify/functions/matches')
+            .then(response => response.json())
+            .then(matches => {
+              if (matches && matches.length > 0) {
+                matches.map(match => {
+                  $(`<tr><td>${match.map}</td><td>${match.rounds}</td><td>${match.startedAt}</td><td><a href="/matches/${match.id}" class="waves-effect waves-light btn">view</a></td></tr>`).appendTo('#matches')
+                })
+                $('.progress').hide()
+              }
+            })
+        })
       </script>
       <!--JavaScript at end of body for optimized loading-->
       <!-- Compiled and minified JavaScript -->
