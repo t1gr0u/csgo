@@ -190,4 +190,4 @@ index.js
 # Local Netlify folder
 .netlify
 
-netlify.toml
+# netlify.toml
