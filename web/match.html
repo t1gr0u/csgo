@@ -38,7 +38,7 @@
               <b>Rounds: </b><span id="match-rounds"></span>
             </p>
             <p>
-              <b>Duration: </b>
+              <b>Duration: </b><span id="match-duration"></span>
             </p>
           </div>
         </div>
@@ -51,6 +51,7 @@
                     <th>Kills</th>
                     <th>Deaths</th>
                     <th>K/D</th>
+                    <th>Headshots</th>
                     <th>Shots</th>
                     <th>Hits</th>
                     <th>Assists</th>
@@ -70,6 +71,7 @@
       </div>
 
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
       <script type="text/javascript">
         window.addEventListener('load', function () {
           const path = window.location.pathname.split('/')
@@ -82,18 +84,27 @@
                 const mapName = profiles[0].map
                 const rounds = profiles[0].rounds
                 const startedAt = profiles[0].startedAt
+                const finishedAt = profiles[0].finishedAt
 
                 $('#map-name').html(mapName)
                 $(`<img src="/img/${mapName}.jpg" class="map-image">`).appendTo('#map-image')
                 $('#match-date').html(startedAt)
                 $('#match-rounds').html(rounds)
+                const duration = moment(finishedAt).diff(moment(startedAt), 'minutes')
+                $('#match-duration').html(`${duration} mins`)
 
                 profiles.map(profile => {
+                  let killsPerDeaths = '-'
+                  if (profile.deaths > 0) {
+                    killsPerDeaths = Number.parseFloat(profile.kills / profile.deaths).toFixed(2)
+                  }
+
                   let text = '<tr>'
                   text += `<td>${profile.name}</td>`
                   text += `<td>${profile.kills}</td>`
                   text += `<td>${profile.deaths}</td>`
-                  text += `<td>${Number.parseFloat(profile.kills / profile.deaths).toFixed(2)}</td>`
+                  text += `<td>${killsPerDeaths}</td>`
+                  text += `<td>${profile.headshots}</td>`
                   text += `<td>${profile.shots}</td>`
                   text += `<td>${profile.hits}</td>`
                   text += `<td>${profile.assists}</td>`
